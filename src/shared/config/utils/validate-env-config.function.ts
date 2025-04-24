@@ -46,6 +46,10 @@ function validateString(
     return `- ${name} is required`;
   }
 
+  if (!options.required && !value) {
+    return null;
+  }
+
   if (!value?.length) {
     return `- ${name} must be a string`;
   }
@@ -60,6 +64,10 @@ function validateNumber(
 ): string | null {
   if (options.required && !value) {
     return `- ${name} is required`;
+  }
+
+  if (!options.required && !value) {
+    return null;
   }
 
   const parsedValue: number = Number(value);
@@ -78,6 +86,10 @@ function validateLiteral(
 ): string | null {
   if (options.required && !value) {
     return `- ${name} is required`;
+  }
+
+  if (!options.required && !value) {
+    return null;
   }
 
   if (!options.values) {
