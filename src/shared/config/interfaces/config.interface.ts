@@ -7,7 +7,6 @@ export interface Config {
   APP_GLOBAL_PREFIX: string;
 
   APP_LOG_LEVEL: LogLevel;
-  APP_BASE_URL: string;
 
   AUTHENTICATION_API_KEY: string;
 

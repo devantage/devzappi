@@ -24,7 +24,6 @@ const validationConfig: Record<string, ValidationOptions> = {
     type: 'literal',
     values: ['log', 'error', 'warn', 'debug', 'verbose', 'fatal'],
   },
-  APP_BASE_URL: { required: true, type: 'string' },
   AUTHENTICATION_API_KEY: { required: true, type: 'string' },
 
   REDIS_REPOSITORY_HOST: { required: true, type: 'string' },
