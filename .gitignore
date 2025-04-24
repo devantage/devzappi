@@ -1,0 +1,37 @@
+# Compiled output
+dist
+
+# Dependencies
+node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Miscellaneous
+/coverage
+/e2e-coverage
+npm-*.log
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Environments
+.env
+
+# Files
+files/*
+!files/.gitkeep

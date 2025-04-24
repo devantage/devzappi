@@ -1,0 +1,19 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./dist",
+    "module": "commonjs",
+    "target": "es2023",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "declaration": false,
+    "useDefineForClassFields": false,
+    "strictPropertyInitialization": false
+  }
+}

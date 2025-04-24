@@ -1,0 +1,26 @@
+name: whatsapp-api
+
+services:
+  redis:
+    image: docker.io/bitnami/redis:7.0
+    hostname: redis
+    env_file: ./.docker/.env.redis
+    ports:
+      - 6379
+    volumes:
+      - redis_data:/bitnami/redis
+
+  api:
+    image: devantage/whatsapp-api
+    build: .
+    hostname: api
+    volumes:
+      - ./.docker/.env.api:/app/.env:r
+    ports:
+      - 3333:3333
+    depends_on:
+      - redis
+
+volumes:
+  redis_data:
+    driver: local
