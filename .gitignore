@@ -30,8 +30,4 @@ npm-*.log
 Thumbs.db
 
 # Environments
-.env
-
-# Files
-files/*
-!files/.gitkeep
+/.env
