@@ -3,4 +3,7 @@ package-lock.json
 dist
 coverage
 e2e-coverage
+.docker
+.github
+.portainer
 .env
