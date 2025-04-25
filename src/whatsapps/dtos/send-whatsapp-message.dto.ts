@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumberString, ValidateIf } from 'class-validator';
+import { IsNumberString, IsOptional } from 'class-validator';
 
 import { IsNotBlank } from '../../shared/validation';
 
@@ -9,10 +9,7 @@ export class SendWhatsAppMessageDTO {
   public readonly phone: string;
 
   @ApiPropertyOptional({ description: 'Mensagem' })
-  @ValidateIf(
-    (dto: SendWhatsAppMessageDTO) =>
-      !dto.attachments || !dto.attachments.length,
-  )
+  @IsOptional()
   @IsNotBlank()
   public readonly message?: string;
 
