@@ -48,7 +48,7 @@ export class WhatsApp {
 
   private _getClient(): WhatsAppClient {
     if (!this._client) {
-      throw new Error('WhatsApp client not attached');
+      throw new Error('WhatsApp client is not attached');
     }
 
     return this._client;

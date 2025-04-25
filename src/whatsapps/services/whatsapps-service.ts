@@ -32,6 +32,8 @@ export class WhatsAppsService implements OnModuleInit {
   public async create(dto: CreateWhatsAppDTO): Promise<WhatsApp> {
     const whatsApp: WhatsApp = await this._repository.create(new WhatsApp(dto));
 
+    await this._attachClient(whatsApp);
+
     return whatsApp;
   }
 
