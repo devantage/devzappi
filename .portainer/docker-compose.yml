@@ -1,4 +1,4 @@
-name: whatsapp_api
+name: whatsapp-api
 
 services:
   redis:
