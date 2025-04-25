@@ -27,20 +27,20 @@ export class RedisWhatsAppsRepository extends WhatsAppsRepository {
     });
   }
 
-  public async create(whatsApp: WhatsApp): Promise<WhatsApp> {
+  public async save(whatsApp: WhatsApp): Promise<WhatsApp> {
     const id: number = await this._getNextId();
 
-    const createdWhatsApp: WhatsApp = new WhatsApp({
+    const savedWhatsApp: WhatsApp = new WhatsApp({
       ...whatsApp.toJSON(),
       id,
     });
 
     await this._redisClient.set(
       `whatsapp-${id.toString()}`,
-      JSON.stringify(createdWhatsApp),
+      JSON.stringify(savedWhatsApp),
     );
 
-    return createdWhatsApp;
+    return savedWhatsApp;
   }
 
   public async findAll(): Promise<WhatsApp[]> {

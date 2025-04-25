@@ -5,7 +5,11 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 
-import { CreateWhatsAppDTO, SendWhatsAppMessageDTO } from '../dtos';
+import {
+  CreateWhatsAppDTO,
+  SendWhatsAppMessageDTO,
+  UpdateWhatsAppDTO,
+} from '../dtos';
 import { WhatsApp } from '../entities';
 import { WhatsAppClient } from '../providers';
 import { WhatsAppsRepository } from '../repositories';
@@ -30,7 +34,9 @@ export class WhatsAppsService implements OnModuleInit {
   }
 
   public async create(dto: CreateWhatsAppDTO): Promise<WhatsApp> {
-    const whatsApp: WhatsApp = await this._repository.create(new WhatsApp(dto));
+    let whatsApp: WhatsApp = new WhatsApp(dto);
+
+    whatsApp = await this._repository.save(whatsApp);
 
     await this._attachClient(whatsApp);
 
@@ -65,6 +71,18 @@ export class WhatsAppsService implements OnModuleInit {
     return whatsApp.getQrCodeImage();
   }
 
+  public async update(dto: UpdateWhatsAppDTO, id: number): Promise<WhatsApp> {
+    let whatsApp: WhatsApp = await this.getById(id);
+
+    Object.assign(whatsApp, dto);
+
+    whatsApp = await this._repository.save(whatsApp);
+
+    await this._attachClient(whatsApp);
+
+    return whatsApp;
+  }
+
   public async delete(id: number): Promise<void> {
     const whatsApp: WhatsApp = await this.getById(id);
 
@@ -74,8 +92,8 @@ export class WhatsAppsService implements OnModuleInit {
   }
 
   public async sendMessage(
-    id: number,
     dto: SendWhatsAppMessageDTO,
+    id: number,
   ): Promise<void> {
     const whatsApp: WhatsApp = await this.getById(id);
 
