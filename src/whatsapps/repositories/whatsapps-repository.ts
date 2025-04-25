@@ -1,7 +1,7 @@
 import { WhatsApp } from '../entities';
 
 export abstract class WhatsAppsRepository {
-  public abstract create(whatsApp: WhatsApp): Promise<WhatsApp>;
+  public abstract save(whatsApp: WhatsApp): Promise<WhatsApp>;
 
   public abstract findAll(): Promise<WhatsApp[]>;
 

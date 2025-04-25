@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   Param,
+  Patch,
   Post,
   StreamableFile,
   UploadedFiles,
@@ -24,6 +25,7 @@ import {
   CreateWhatsAppDTO,
   GetWhatsAppByIdDTO,
   SendWhatsAppMessageDTO,
+  UpdateWhatsAppDTO,
 } from '../dtos';
 import { WhatsApp } from '../entities';
 import { WhatsAppsService } from '../services';
@@ -95,6 +97,19 @@ export class WhatsAppsController {
     return this._service.getQrCodeImage(paramDto.id);
   }
 
+  @ApiOperation({ summary: 'Update a WhatsApp' })
+  @ApiOkResponse({
+    description: 'Updated WhatsApp',
+    type: () => WhatsApp,
+  })
+  @Patch(':id')
+  public async update(
+    @Param() paramDto: GetWhatsAppByIdDTO,
+    @Body() bodyDto: UpdateWhatsAppDTO,
+  ): Promise<WhatsApp> {
+    return this._service.update(bodyDto, paramDto.id);
+  }
+
   @ApiOperation({
     summary: 'Delete a WhatsApp',
   })
@@ -121,10 +136,13 @@ export class WhatsAppsController {
     @Body() bodyDto: SendWhatsAppMessageDTO,
     @UploadedFiles() attachments: Express.Multer.File[],
   ): Promise<void> {
-    await this._service.sendMessage(paramDto.id, {
-      phone: bodyDto.phone,
-      message: bodyDto.message,
-      attachments,
-    });
+    await this._service.sendMessage(
+      {
+        phone: bodyDto.phone,
+        message: bodyDto.message,
+        attachments,
+      },
+      paramDto.id,
+    );
   }
 }
