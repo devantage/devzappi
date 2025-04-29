@@ -28,21 +28,13 @@ export class BootstrapLogger {
   }
 
   private _getPrefix(level: LogLevel): string {
-    const prefix: string = `${this._prefix} ${this._getPidPrefix(level)} - ${this._getTimestampPrefix()} ${this._getLevelPrefix(level)} ${this._getContextPrefix()}`;
+    const prefix: string = `${this._prefix} ${this._getPidPrefix(level)}  - ${this._getTimestampPrefix()} ${this._getLevelPrefix(level)} ${this._getContextPrefix()}`;
 
     return this._paintLevel(prefix, level);
   }
 
   private _getPidPrefix(level: LogLevel): string {
-    let prefix: string = process.pid.toString();
-
-    let lengthDiff: number = 6 - prefix.length;
-
-    while (lengthDiff) {
-      prefix += ' ';
-
-      lengthDiff--;
-    }
+    const prefix: string = process.pid.toString();
 
     return this._paintLevel(prefix, level);
   }
