@@ -20,7 +20,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { ApiKeyAuth } from '../../authentication';
+import { ApiKeyAuth } from '../../auth';
 import {
   CreateWhatsAppDTO,
   GetWhatsAppByIdDTO,

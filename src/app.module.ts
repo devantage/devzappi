@@ -5,15 +5,15 @@ import {
 } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
-import { AuthenticationGuard } from './authentication';
-import { exceptionFactory } from './shared/validation';
+import { ApiKeyAuthGuard } from './auth';
+import { validationExceptionFactory } from './shared/validation';
 import { WhatsAppsModule } from './whatsapps';
 
 @Module({
   imports: [WhatsAppsModule],
   controllers: [],
   providers: [
-    { provide: APP_GUARD, useClass: AuthenticationGuard },
+    { provide: APP_GUARD, useClass: ApiKeyAuthGuard },
     { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor },
     {
       provide: APP_PIPE,
@@ -21,7 +21,7 @@ import { WhatsAppsModule } from './whatsapps';
         whitelist: true,
         validateCustomDecorators: true,
         transform: true,
-        exceptionFactory,
+        exceptionFactory: validationExceptionFactory,
       }),
     },
   ],

@@ -7,21 +7,20 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 
-import { NO_AUTHENTICATION_META } from '../decorators';
+import { NO_AUTH_META } from '../decorators';
 import { extractApiKeyFromRequest } from '../utils';
 
 @Injectable()
-export class AuthenticationGuard implements CanActivate {
+export class ApiKeyAuthGuard implements CanActivate {
   public constructor(private readonly reflector: Reflector) {}
 
   public canActivate(context: ExecutionContext): boolean {
-    const noAuthentication: boolean | undefined =
-      this.reflector.getAllAndOverride(NO_AUTHENTICATION_META, [
-        context.getHandler(),
-        context.getClass(),
-      ]);
+    const noAuth: boolean | undefined = this.reflector.getAllAndOverride(
+      NO_AUTH_META,
+      [context.getHandler(), context.getClass()],
+    );
 
-    if (noAuthentication) {
+    if (noAuth) {
       return true;
     }
 
@@ -29,7 +28,7 @@ export class AuthenticationGuard implements CanActivate {
 
     const apiKey: string = extractApiKeyFromRequest(request);
 
-    if (apiKey !== process.env.AUTHENTICATION_API_KEY) {
+    if (apiKey !== process.env.APP_AUTH_KEY) {
       throw new UnauthorizedException('Missing or invalid API key');
     }
 

@@ -1,14 +1,14 @@
 import { LogLevel } from '@nestjs/common';
 
-export interface Config {
-  TZ?: string;
+export interface EnvConfig {
+  TZ: string;
   APP_ENV: 'development' | 'staging' | 'production';
   APP_PORT: string;
   APP_GLOBAL_PREFIX: string;
 
   APP_LOG_LEVEL: LogLevel;
 
-  AUTHENTICATION_API_KEY: string;
+  APP_AUTH_KEY: string;
 
   REDIS_REPOSITORY_HOST: string;
   REDIS_REPOSITORY_PORT: string;
