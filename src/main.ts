@@ -1,4 +1,4 @@
-import { Logger, LogLevel, VersioningType } from '@nestjs/common';
+import { LogLevel, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import {
@@ -11,20 +11,23 @@ import {
 import { description, version } from '../package.json';
 import { AppModule } from './app.module';
 import { validateEnvConfig } from './shared/config';
-import { getLogLevels } from './shared/logging';
+import { BootstrapLogger, getLogLevels } from './shared/logging';
 import { getErrorMessage } from './shared/utils';
 
-const logger: Logger = new Logger('NestApplication');
+const logger: BootstrapLogger = new BootstrapLogger(
+  '[Nest]',
+  'NestApplication',
+);
 
 function validateEnvConfigs(): void {
   try {
-    console.log(`Validating application environment configuration...`);
+    logger.log(`Validating application environment configuration...`);
 
     validateEnvConfig();
 
-    console.log(`Application environment configuration successfully validated`);
+    logger.log(`Application environment configuration successfully validated`);
   } catch (error) {
-    console.error(
+    logger.error(
       `Invalid application environment configuration: ${getErrorMessage(error)}`,
     );
 
@@ -33,11 +36,11 @@ function validateEnvConfigs(): void {
 }
 
 function getEnabledLogLevels(): LogLevel[] {
-  console.log(`Getting application enabled log levels...`);
+  logger.log(`Getting application enabled log levels...`);
 
   const enabledLogLevels: LogLevel[] = getLogLevels(process.env.APP_LOG_LEVEL);
 
-  console.log(
+  logger.log(
     `Application enabled log levels successfully got. Enabled levels: [${enabledLogLevels.join(', ')}]`,
   );
 
