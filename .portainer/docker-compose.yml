@@ -1,4 +1,4 @@
-name: whatsapp-api
+name: devzappi
 
 services:
   redis:
@@ -14,7 +14,7 @@ services:
       - redis_data:/bitnami/redis
 
   api:
-    image: ghcr.io/devantage/whatsapp-api:1.2.0
+    image: ghcr.io/devantage/devzappi:1.2.0
     hostname: api
     environment:
       TZ: ${TZ}

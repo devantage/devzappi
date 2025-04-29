@@ -1,4 +1,4 @@
-name: whatsapp-api
+name: devzappi
 
 services:
   redis:
