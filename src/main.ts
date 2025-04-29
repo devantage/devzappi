@@ -16,38 +16,88 @@ import { getErrorMessage } from './shared/utils';
 
 const logger: Logger = new Logger('NestApplication');
 
-function validateEnvironments(): void {
-  validateEnvConfig();
-}
+function validateEnvConfigs(): void {
+  try {
+    logger.log(`Validating application environment configuration...`);
 
-function configureQueryParser(app: NestExpressApplication): void {
-  app.set('query parser', 'extended');
+    validateEnvConfig();
+
+    logger.log(`Application environment configuration successfully validated`);
+  } catch (error) {
+    logger.error(
+      `Invalid application environment configuration: ${getErrorMessage(error)}`,
+    );
+
+    process.exit(2);
+  }
 }
 
 function configureLogger(app: NestExpressApplication): void {
+  logger.log(`Configuring application logger...`);
+
   app.useLogger(getLogLevels(process.env.APP_LOG_LEVEL));
+
+  logger.log(`Application logger successfully configured`);
+}
+
+function configureQueryParser(app: NestExpressApplication): void {
+  logger.log(`Configuring application query parser...`);
+
+  app.set('query parser', 'extended');
+
+  logger.log(`Application query parser successfully configured`);
 }
 
 function configureVersioning(
   app: NestExpressApplication,
 ): NestExpressApplication {
-  return app.enableVersioning({
+  logger.log(`Configuring application versioning...`);
+
+  const defaultVersion: string = '1';
+
+  const configuredApp: NestExpressApplication = app.enableVersioning({
     type: VersioningType.URI,
-    defaultVersion: ['1'],
+    defaultVersion: [defaultVersion],
   });
+
+  logger.log(
+    `Application versioning successfully configured. Default version: ${defaultVersion}`,
+  );
+
+  return configuredApp;
 }
 
 function configureGlobalPrefix(
   app: NestExpressApplication,
 ): NestExpressApplication {
-  if (process.env.APP_GLOBAL_PREFIX) {
-    return app.setGlobalPrefix(process.env.APP_GLOBAL_PREFIX);
+  logger.log(`Configuring application global prefix...`);
+
+  let configuredApp: NestExpressApplication = app;
+
+  const globalPrefix: string | undefined = process.env.APP_GLOBAL_PREFIX;
+
+  if (globalPrefix) {
+    configuredApp = app.setGlobalPrefix(globalPrefix);
   } else {
-    return app;
+    logger.log(`No global prefix is set. Ignoring...`);
   }
+
+  logger.log(
+    `Application global prefix successfully configured. Global prefix: ${globalPrefix || 'none'}`,
+  );
+
+  return configuredApp;
 }
 
-function initializeSwaggerUi(app: NestExpressApplication): void {
+function configureCors(app: NestExpressApplication): void {
+  logger.log('Configuring application CORS...');
+
+  app.enableCors();
+
+  logger.log('Application CORS successfully configured');
+}
+
+function initializeSwaggerUi(app: NestExpressApplication): string {
   logger.log('Initializing Swagger UI...');
 
   let documentBuilder: DocumentBuilder = new DocumentBuilder();
@@ -99,14 +149,20 @@ function initializeSwaggerUi(app: NestExpressApplication): void {
   SwaggerModule.setup(path, app, document, options);
 
   logger.log('Swagger UI successfully initialized');
+
+  return path;
 }
 
-function configureCors(app: NestExpressApplication): void {
-  logger.log('Configuring Nest application CORS...');
+async function initialize(app: NestExpressApplication): Promise<string> {
+  logger.log(`Initializing application...`);
 
-  app.enableCors();
+  await app.listen(Number(process.env.APP_PORT));
 
-  logger.log('Nest application CORS successfully configured');
+  const appUrl: string = await app.getUrl();
+
+  logger.log(`Application successfully initialized`);
+
+  return appUrl;
 }
 
 async function bootstrap(): Promise<void> {
@@ -114,29 +170,25 @@ async function bootstrap(): Promise<void> {
     bufferLogs: true,
   });
 
-  try {
-    validateEnvironments();
-  } catch (error) {
-    console.error(getErrorMessage(error));
-
-    process.exit(2);
-  }
-
-  configureQueryParser(app);
+  validateEnvConfigs();
 
   configureLogger(app);
+
+  configureQueryParser(app);
 
   app = configureVersioning(app);
 
   app = configureGlobalPrefix(app);
 
-  initializeSwaggerUi(app);
-
   configureCors(app);
 
-  await app.listen(Number(process.env.APP_PORT));
+  const docsPath: string = initializeSwaggerUi(app);
 
-  logger.log(`Nest application is running on: ${await app.getUrl()}`);
+  const appUrl: string = await initialize(app);
+
+  logger.log(
+    `Application is listening at ${appUrl} and documentation is available at ${appUrl}/${docsPath}`,
+  );
 }
 
 void bootstrap();

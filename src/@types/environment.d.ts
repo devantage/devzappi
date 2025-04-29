@@ -1,8 +1,8 @@
-import { Config } from '../shared/config';
+import { EnvConfig } from '../shared/config';
 
 declare global {
   namespace NodeJS {
-    interface ProcessEnv extends Config {
+    interface ProcessEnv extends EnvConfig {
       NODE_ENV: 'development' | 'staging' | 'production';
     }
   }

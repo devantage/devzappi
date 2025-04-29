@@ -7,5 +7,6 @@
   },
   "testEnvironment": "node",
   "collectCoverageFrom": ["**/*.(t|j)s"],
-  "coverageDirectory": "../e2e-coverage"
+  "coverageDirectory": "../e2e-coverage",
+  "passWithNoTests": true
 }

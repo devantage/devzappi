@@ -18,7 +18,7 @@ const formatErrors = (errors: ValidationError[]): ValidationErrors => {
   });
 };
 
-export const exceptionFactory = (
+export const validationExceptionFactory = (
   errors: ValidationError[],
 ): BadRequestException => {
   return new BadRequestException(formatErrors(errors));

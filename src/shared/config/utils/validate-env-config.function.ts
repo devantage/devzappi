@@ -1,3 +1,5 @@
+import { EnvConfig } from '../interfaces';
+
 type ValidationOptions =
   | {
       required: boolean;
@@ -10,7 +12,8 @@ type ValidationOptions =
       values: string[];
     };
 
-const validationConfig: Record<string, ValidationOptions> = {
+const validationSchema: Record<keyof EnvConfig, ValidationOptions> = {
+  TZ: { required: true, type: 'string' },
   APP_ENV: {
     required: true,
     type: 'literal',
@@ -24,7 +27,7 @@ const validationConfig: Record<string, ValidationOptions> = {
     type: 'literal',
     values: ['log', 'error', 'warn', 'debug', 'verbose', 'fatal'],
   },
-  AUTHENTICATION_API_KEY: { required: true, type: 'string' },
+  APP_AUTH_KEY: { required: true, type: 'string' },
 
   REDIS_REPOSITORY_HOST: { required: true, type: 'string' },
   REDIS_REPOSITORY_PORT: { required: true, type: 'number' },
@@ -106,25 +109,38 @@ function validateLiteral(
 export function validateEnvConfig(): void {
   let validationErrors: (string | null)[] = [];
 
-  for (const curConfigName of Object.keys(validationConfig)) {
-    const curConfigOptions: ValidationOptions = validationConfig[curConfigName];
+  for (const curEnvConfigName of Object.keys(validationSchema)) {
+    const curEnvConfigOptions: ValidationOptions =
+      validationSchema[curEnvConfigName as keyof EnvConfig];
 
-    const curConfigValue: string | undefined = process.env[curConfigName];
+    const curEnvConfigValue: string | undefined = process.env[curEnvConfigName];
 
-    switch (curConfigOptions.type) {
+    switch (curEnvConfigOptions.type) {
       case 'string':
         validationErrors.push(
-          validateString(curConfigName, curConfigValue, curConfigOptions),
+          validateString(
+            curEnvConfigName,
+            curEnvConfigValue,
+            curEnvConfigOptions,
+          ),
         );
         break;
       case 'number':
         validationErrors.push(
-          validateNumber(curConfigName, curConfigValue, curConfigOptions),
+          validateNumber(
+            curEnvConfigName,
+            curEnvConfigValue,
+            curEnvConfigOptions,
+          ),
         );
         break;
       case 'literal':
         validationErrors.push(
-          validateLiteral(curConfigName, curConfigValue, curConfigOptions),
+          validateLiteral(
+            curEnvConfigName,
+            curEnvConfigValue,
+            curEnvConfigOptions,
+          ),
         );
         break;
     }
@@ -136,7 +152,7 @@ export function validateEnvConfig(): void {
 
   if (validationErrors.length) {
     throw new Error(
-      `Invalid environment configuration:\n\n${validationErrors.join('\n')}`,
+      `Invalid environment EnvConfiguration:\n\n${validationErrors.join('\n')}`,
     );
   }
 }
