@@ -1,11 +1,11 @@
 {
-  "name": "whatsapp-api",
+  "name": "devzappi",
   "version": "1.2.0",
-  "description": "WhatsApp API",
+  "description": "DevZappi WhatsApp API",
   "contributors": [
     "Guilherme Nogueira <guilherme.lopesn@gmail.com>"
   ],
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": true,
   "main": "src/main.js",
   "scripts": {

@@ -11,7 +11,7 @@ services:
       - redis_data:/bitnami/redis
 
   api:
-    image: devantage/whatsapp-api
+    image: devantage/devzappi
     build: .
     hostname: api
     env_file: ./.docker/.env.api

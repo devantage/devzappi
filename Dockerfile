@@ -2,10 +2,10 @@
 FROM node:23
 
 # Creating temporary directory for application's source code
-RUN mkdir -p /app-source
+RUN mkdir -p /source
 
-# Setting working directory to /app-source
-WORKDIR /app-source
+# Setting working directory to /source
+WORKDIR /source
 
 # Copying application's source code to container's working directory
 COPY . .
@@ -26,13 +26,13 @@ RUN mkdir -p /app
 WORKDIR /app
 
 # Copying the application dependencies to builded application directory
-RUN cp -r /app-source/node_modules .
+RUN cp -r /source/node_modules .
 
 # Copying the builded application to builded application directory
-RUN cp -r /app-source/dist/* .
+RUN cp -r /source/dist/* .
 
 # Removing the application source code
-RUN rm -rf /app-source
+RUN rm -rf /source
 
 # Creating app user
 RUN useradd -m -u 1001 app_user
