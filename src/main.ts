@@ -1,4 +1,4 @@
-import { Logger, VersioningType } from '@nestjs/common';
+import { Logger, LogLevel, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import {
@@ -18,13 +18,13 @@ const logger: Logger = new Logger('NestApplication');
 
 function validateEnvConfigs(): void {
   try {
-    logger.log(`Validating application environment configuration...`);
+    console.log(`Validating application environment configuration...`);
 
     validateEnvConfig();
 
-    logger.log(`Application environment configuration successfully validated`);
+    console.log(`Application environment configuration successfully validated`);
   } catch (error) {
-    logger.error(
+    console.error(
       `Invalid application environment configuration: ${getErrorMessage(error)}`,
     );
 
@@ -32,12 +32,16 @@ function validateEnvConfigs(): void {
   }
 }
 
-function configureLogger(app: NestExpressApplication): void {
-  logger.log(`Configuring application logger...`);
+function getEnabledLogLevels(): LogLevel[] {
+  console.log(`Getting application enabled log levels...`);
 
-  app.useLogger(getLogLevels(process.env.APP_LOG_LEVEL));
+  const enabledLogLevels: LogLevel[] = getLogLevels(process.env.APP_LOG_LEVEL);
 
-  logger.log(`Application logger successfully configured`);
+  console.log(
+    `Application enabled log levels successfully got. Enabled levels: [${enabledLogLevels.join(', ')}]`,
+  );
+
+  return enabledLogLevels;
 }
 
 function configureQueryParser(app: NestExpressApplication): void {
@@ -166,13 +170,13 @@ async function initialize(app: NestExpressApplication): Promise<string> {
 }
 
 async function bootstrap(): Promise<void> {
-  let app: NestExpressApplication = await NestFactory.create(AppModule, {
-    bufferLogs: true,
-  });
-
   validateEnvConfigs();
 
-  configureLogger(app);
+  const appLogLevels: LogLevel[] = getEnabledLogLevels();
+
+  let app: NestExpressApplication = await NestFactory.create(AppModule, {
+    logger: appLogLevels,
+  });
 
   configureQueryParser(app);
 

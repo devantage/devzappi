@@ -152,7 +152,7 @@ export function validateEnvConfig(): void {
 
   if (validationErrors.length) {
     throw new Error(
-      `Invalid environment EnvConfiguration:\n\n${validationErrors.join('\n')}`,
+      `Invalid environment configuration:\n\n${validationErrors.join('\n')}`,
     );
   }
 }
