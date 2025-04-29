@@ -45,6 +45,6 @@ docker compose up -d
 [Nest] 1  - 04/29/2025, 4:01:10 PM     LOG [NestApplication] Application is listening at http://[::1]:80 and documentation is available at http://[::1]:80/docs
 ```
 
-3. You can see that documentation is available at 'http://[::1]:80/docs'. Access this address on browser and you will be able to see all supported operations.
+3. You can see that documentation is available at 'http://[::1]:80/docs'. Access this address on your browser and you will be able to see all supported operations.
 
 - Obs.: If you need to change any configuration, just edit '.docker/.env.api' and re-run the command from step 1.
