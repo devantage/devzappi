@@ -32,9 +32,9 @@ services:
       REDIS_SESSIONS_DATABASE: ${API_REDIS_SESSIONS_DATABASE}
     labels:
       traefik.enable: 'true'
-      traefik.http.routers.api.entrypoints: 'websecure'
-      traefik.http.routers.api.rule: ${TRAEFIK_RULE}
-      traefik.http.routers.api.tls.certresolver: 'letsencrypt'
+      traefik.http.routers.devzappi.entrypoints: 'websecure'
+      traefik.http.routers.devzappi.rule: ${TRAEFIK_RULE}
+      traefik.http.routers.devzappi.tls.certresolver: 'letsencrypt'
     networks:
       - default
       - traefik
